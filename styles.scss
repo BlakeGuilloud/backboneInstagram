@@ -1,3 +1,20 @@
 body{
   background-color: blue;
 }
+
+.singleImage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  flex-direction: column;
+  width: 60%;
+  img {
+    width: 60%;
+  }
+}
+
+.fa{
+  font-size: 30px;
+  color: red;
+}

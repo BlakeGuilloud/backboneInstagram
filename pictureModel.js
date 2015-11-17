@@ -6,6 +6,7 @@ module.exports = Backbone.Model.extend({
   defaults: {
     title: 'Default Image',
     image: 'http://fillmurray.com/200/300',
+    comment: 'You Forgot to Comment',
     likes: 0
   },
   initialize: function(){

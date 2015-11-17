@@ -15,13 +15,21 @@ module.exports = {
       console.log(data)
       _.each(data, function(el, idx, array){
         $('.displayPics').append(
-        '<div class = "col-md-4" >'
+        '<div class = "singleImage" data-index='
+        + el._id
+        + ' >'
         + '<h2>'
         + el.title
         + '</h2>'
         + '<img src ="'
         + el.image
         + '">'
+        + '<p>'
+        + el.comment
+        + '</p>'
+        + '<i class="fa fa-heart-o" data-index='
+        + el._id
+        + '></i>'
         + '</div>'
       )
       });
@@ -32,21 +40,40 @@ module.exports = {
       event.preventDefault();
       var imageTitle = $('#titleInput').val();
       var imageUrl = $('#imageInput').val();
+      var imageComment = $('#commentInput').val();
       var newPictureModel = new PictureModel({
         title: imageTitle,
-        image: imageUrl
+        image: imageUrl,
+        comment: imageComment
       });
       newPictureModel.save();
       $('#titleInput').val('');
       $('#imageInput').val('');
-      $('.displayPics').prepend('<div class ="col-md-4">'
+      $('#commentInput').val('');
+      $('.displayPics').prepend('<div class ="singleImage">'
       + '<h2>'
       + newPictureModel.get('title')
       + '</h2>'
       + '<img src ="'
       + newPictureModel.get('image')
       + '">'
+      + '<p>'
+      + newPictureModel.get('comment')
+      + '</p>'
+      + '<i class="fa fa-heart-o"></i>'
       + '</div>')
+    });
+
+
+
+    $('body').on('click', '.fa', function(){
+      console.log('blue')
+      $(this).toggleClass('fa-heart');
+      $(this).toggleClass('fa-heart-o');
+      favorites = [];
+      var favoriteImageID = $(this).data('index');
+      favorites.push(favoriteImageID);
+      console.log(favorites);
     });
   },
 }
@@ -65,7 +92,8 @@ $(document).ready(function(){
 
   var myModel = new PictureModel({
     image: 'http://placecage.com/200/300',
-    title: 'This is Nick Cage'
+    title: 'This is Nick Cage',
+    comment: 'Whoops- you forgot a comment'
   });
   // myModel.save();
   pictureCollection.fetch().then(function(collectionData){
@@ -12755,6 +12783,7 @@ module.exports = Backbone.Model.extend({
   defaults: {
     title: 'Default Image',
     image: 'http://fillmurray.com/200/300',
+    comment: 'You Forgot to Comment',
     likes: 0
   },
   initialize: function(){

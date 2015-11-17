@@ -11,7 +11,8 @@ $(document).ready(function(){
 
   var myModel = new PictureModel({
     image: 'http://placecage.com/200/300',
-    title: 'This is Nick Cage'
+    title: 'This is Nick Cage',
+    comment: 'Whoops- you forgot a comment'
   });
   // myModel.save();
   pictureCollection.fetch().then(function(collectionData){
