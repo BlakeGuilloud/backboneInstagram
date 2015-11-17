@@ -1,10 +1,11 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var $ = require('jquery');
 var _ = require('underscore');
+var Backbone = require('backbone');
 var PictureModel = require('./pictureModel');
 var PictureCollection = require('./pictureCollection');
 
-module.exports = {
+module.exports = app = {
   init: function(){
     this.styling();
     this.events();
@@ -27,7 +28,10 @@ module.exports = {
         + '<p>'
         + el.comment
         + '</p>'
-        + '<i class="fa fa-heart-o" data-index='
+        + '<span>'
+        + el.likes
+        + ' Likes</span>'
+        + '<i class="fa fa-thumbs-o-up" data-index='
         + el._id
         + '></i>'
         + '</div>'
@@ -60,25 +64,39 @@ module.exports = {
       + '<p>'
       + newPictureModel.get('comment')
       + '</p>'
-      + '<i class="fa fa-heart-o"></i>'
+      + '<span>'
+      + newPictureModel.get('likes')
+      + ' Likes</span>'
+      + '<i class="fa fa-thumbs-o-up" data-index='
+      + newPictureModel.get('id')
+      + '></i>'
       + '</div>')
     });
 
-
-
-    $('body').on('click', '.fa', function(){
-      console.log('blue')
-      $(this).toggleClass('fa-heart');
-      $(this).toggleClass('fa-heart-o');
-      favorites = [];
-      var favoriteImageID = $(this).data('index');
-      favorites.push(favoriteImageID);
-      console.log(favorites);
-    });
+    $("body").on("click",".fa",function (e) {
+      var id = $(this).data('index');
+       var pictureCollection = new PictureCollection();
+       pictureCollection.fetch().then(function(data){
+       _.each(data, function(el){
+         if(id === el._id){
+           var picture = new PictureModel({_id: el._id});
+           el.likes = el.likes + 1;
+          //  picture.fetch();
+           picture.set({
+             likes: el.likes,
+             image: el.image,
+             comment: el.comment,
+             title: el.title
+           });
+           picture.save();
+         }
+       });
+     });
+   });
   },
 }
 
-},{"./pictureCollection":6,"./pictureModel":7,"jquery":4,"underscore":5}],2:[function(require,module,exports){
+},{"./pictureCollection":6,"./pictureModel":7,"backbone":3,"jquery":4,"underscore":5}],2:[function(require,module,exports){
 var $ = require('jquery');
 var app = require('./app');
 var PictureCollection = require('./pictureCollection');
@@ -88,20 +106,6 @@ $(document).ready(function(){
 
   app.init();
   window.pictureCollection = new PictureCollection();
-
-
-  var myModel = new PictureModel({
-    image: 'http://placecage.com/200/300',
-    title: 'This is Nick Cage',
-    comment: 'Whoops- you forgot a comment'
-  });
-  // myModel.save();
-  pictureCollection.fetch().then(function(collectionData){
-    console.log(pictureCollection.models[0].attributes.image)
-  });
-  console.log(myModel.get('image'))
-  $('body').append(myModel.get('title'))
-
 
 });
 
@@ -12770,7 +12774,7 @@ var Backbone = require('backbone');
 var PictureModel = require('./pictureModel');
 
 module.exports = Backbone.Collection.extend({
-  url: 'http://tiny-tiny.herokuapp.com/collections/bb2model',
+  url: 'http://tiny-tiny.herokuapp.com/collections/bb3model',
   model: PictureModel
 });
 
@@ -12778,7 +12782,7 @@ module.exports = Backbone.Collection.extend({
 var Backbone = require('backbone');
 
 module.exports = Backbone.Model.extend({
-  urlRoot: 'http://tiny-tiny.herokuapp.com/collections/bb2model',
+  urlRoot: 'http://tiny-tiny.herokuapp.com/collections/bb3model',
   idAttribute: '_id',
   defaults: {
     title: 'Default Image',

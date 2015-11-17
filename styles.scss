@@ -1,5 +1,13 @@
 body{
-  background-color: blue;
+  background-color: green;
+
+}
+form {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 60%;
+  margin: 0 auto;
 }
 
 .singleImage {
@@ -9,6 +17,8 @@ body{
   margin: 0 auto;
   flex-direction: column;
   width: 60%;
+  border: 1px solid black;
+  background-color: white;
   img {
     width: 60%;
   }
@@ -16,5 +26,11 @@ body{
 
 .fa{
   font-size: 30px;
+
+}
+.fa-thumbs-o-up, .fa-thumbs-up{
+  color: blue;
+}
+.fa-heart-o, .fa-heart {
   color: red;
 }

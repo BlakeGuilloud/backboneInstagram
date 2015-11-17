@@ -1,7 +1,7 @@
 var Backbone = require('backbone');
 
 module.exports = Backbone.Model.extend({
-  urlRoot: 'http://tiny-tiny.herokuapp.com/collections/bb2model',
+  urlRoot: 'http://tiny-tiny.herokuapp.com/collections/bb3model',
   idAttribute: '_id',
   defaults: {
     title: 'Default Image',

@@ -8,18 +8,4 @@ $(document).ready(function(){
   app.init();
   window.pictureCollection = new PictureCollection();
 
-
-  var myModel = new PictureModel({
-    image: 'http://placecage.com/200/300',
-    title: 'This is Nick Cage',
-    comment: 'Whoops- you forgot a comment'
-  });
-  // myModel.save();
-  pictureCollection.fetch().then(function(collectionData){
-    console.log(pictureCollection.models[0].attributes.image)
-  });
-  console.log(myModel.get('image'))
-  $('body').append(myModel.get('title'))
-
-
 });

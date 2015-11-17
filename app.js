@@ -1,9 +1,10 @@
 var $ = require('jquery');
 var _ = require('underscore');
+var Backbone = require('backbone');
 var PictureModel = require('./pictureModel');
 var PictureCollection = require('./pictureCollection');
 
-module.exports = {
+module.exports = app = {
   init: function(){
     this.styling();
     this.events();
@@ -26,7 +27,10 @@ module.exports = {
         + '<p>'
         + el.comment
         + '</p>'
-        + '<i class="fa fa-heart-o" data-index='
+        + '<span>'
+        + el.likes
+        + ' Likes</span>'
+        + '<i class="fa fa-thumbs-o-up" data-index='
         + el._id
         + '></i>'
         + '</div>'
@@ -59,20 +63,34 @@ module.exports = {
       + '<p>'
       + newPictureModel.get('comment')
       + '</p>'
-      + '<i class="fa fa-heart-o"></i>'
+      + '<span>'
+      + newPictureModel.get('likes')
+      + ' Likes</span>'
+      + '<i class="fa fa-thumbs-o-up" data-index='
+      + newPictureModel.get('id')
+      + '></i>'
       + '</div>')
     });
 
-
-
-    $('body').on('click', '.fa', function(){
-      console.log('blue')
-      $(this).toggleClass('fa-heart');
-      $(this).toggleClass('fa-heart-o');
-      favorites = [];
-      var favoriteImageID = $(this).data('index');
-      favorites.push(favoriteImageID);
-      console.log(favorites);
-    });
+    $("body").on("click",".fa",function (e) {
+      var id = $(this).data('index');
+       var pictureCollection = new PictureCollection();
+       pictureCollection.fetch().then(function(data){
+       _.each(data, function(el){
+         if(id === el._id){
+           var picture = new PictureModel({_id: el._id});
+           el.likes = el.likes + 1;
+          //  picture.fetch();
+           picture.set({
+             likes: el.likes,
+             image: el.image,
+             comment: el.comment,
+             title: el.title
+           });
+           picture.save();
+         }
+       });
+     });
+   });
   },
 }
